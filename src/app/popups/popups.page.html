@@ -8,9 +8,30 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-	<ion-header collapse="condense">
-		<ion-toolbar>
-			<ion-title size="large">Popups</ion-title>
-		</ion-toolbar>
-	</ion-header>
+
+	<div id="popups" class="popups" style="display: none;">
+		<ion-img [src]="popup"></ion-img>
+	</div>
+	
+	<div class="bottom-content">
+
+		<ion-item>
+			<ion-label position="stacked">Time Between Each Image (milliseconds)</ion-label>
+			<ion-range min="100" max="10000" step="100" pin="true" [(ngModel)]="timeBetweenPopups">
+				<ion-label slot="start">100ms</ion-label>
+				<ion-label slot="end">10s</ion-label>
+			</ion-range>
+		</ion-item>
+
+		<ion-item>
+			<ion-label position="stacked">Time of the Session (milliseconds)</ion-label>
+			<ion-range min="1" max="60" step="1" pin="true" [(ngModel)]="sessionTime">
+				<ion-label slot="start">1min</ion-label>
+				<ion-label slot="end">60min</ion-label>
+			</ion-range>
+		</ion-item>
+
+		<ion-button expand="full" color="primary" (click)="startSession()">Start</ion-button>
+	</div>
+
 </ion-content>
