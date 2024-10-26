@@ -1,0 +1,7 @@
+{
+  "name": "Izywere",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
