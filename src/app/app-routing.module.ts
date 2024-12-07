@@ -4,17 +4,17 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/home',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
     path: 'folder/:id',
     loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
   },
-  {
-    path: 'wallpaper',
-    loadChildren: () => import('./wallpaper/wallpaper.module').then( m => m.WallpaperPageModule)
-  },
+  // {
+  //   path: 'wallpaper',
+  //   loadChildren: () => import('./wallpaper/wallpaper.module').then( m => m.WallpaperPageModule)
+  // },
   {
     path: 'popups',
     loadChildren: () => import('./popups/popups.module').then( m => m.PopupsPageModule)
@@ -26,6 +26,14 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+  },
+  {
+    path: 'notifications-settings',
+    loadChildren: () => import('./notifications-settings/notifications-settings.module').then( m => m.NotificationsSettingsPageModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   }
 ];
 

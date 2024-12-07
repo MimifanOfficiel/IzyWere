@@ -6,3 +6,12 @@
 	padding: 16px;
 	box-sizing: border-box;
 }
+
+
+ion-button, ion-range{
+	--background: rgb(240, 51, 83);
+	--bar-background: rgb(177, 15, 15);
+	--bar-background-active: rgb(177, 15, 15);
+	--knob-background: rgb(248, 106, 106);
+	--pin-background: rgb(250, 98, 123);
+}

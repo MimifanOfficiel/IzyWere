@@ -9,10 +9,10 @@ export class ImagesService {
 	
 	constructor() { }
 	
-	async getRandomImage(): Promise<string> {
+	async getRandomImage(pack:String|null): Promise<string> {
 
 		return new Promise((resolve, reject) => {
-			axios.get('http://cuties.vps.boxtoplay.com:1570/wallpaper', {
+			axios.get(`https://cuties.lilabrandon.fr/wallpaper/${pack != null ? pack : ""}`, {
 				responseType: 'arraybuffer' // or 'blob' for browser compatibility
 			})
 			.then(response => {

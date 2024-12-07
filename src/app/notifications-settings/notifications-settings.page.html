@@ -1,0 +1,18 @@
+<ion-header [translucent]="true">
+	<ion-toolbar>
+		<ion-title>Notifications Settings</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+	<ion-header collapse="condense">
+		<ion-toolbar>
+			<ion-title size="large">Notifications Settings</ion-title>
+		</ion-toolbar>
+	</ion-header>
+	<ion-item>
+		<ion-label>Gooning reminder</ion-label>
+		<ion-datetime display-format="HH:mm" presentation="time" [(ngModel)]="selectedTime"></ion-datetime>
+	</ion-item>
+	<ion-button expand="block" (click)="scheduleDailyNotification()">Save</ion-button>
+</ion-content>

@@ -14,7 +14,7 @@ export class RandomWebsitePage implements OnInit {
 	}
 	
 	navigateToRandomWebsite() {
-		const website = axios.get('http	://cuties.vps.boxtoplay.com:1570/randomLink');
+		const website = axios.get('https://cuties.lilabrandon.fr/randomLink');
 		website.then((response) => {
 			window.location.href = response.data;
 		});

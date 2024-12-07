@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImagesService } from '../images.service';
+import { Storage } from '@ionic/storage-angular';
+
 
 @Component({
 	selector: 'app-popups',
@@ -11,13 +13,18 @@ export class PopupsPage implements OnInit {
 	public timeBetweenPopups:number = 100;
 	public sessionTime:number = 1;
 	public popup:string = '';
+	public currentPack:string|null = null;
 	
-	constructor(private imageService:ImagesService) { }
+	constructor(private imageService:ImagesService, private storage: Storage) { }
 	
-	ngOnInit() {
+	async ngOnInit() {
+		await this.storage.create();
+		
 	}
 	
 	async startSession(){
+		this.currentPack = await this.storage.get('selectedPack');
+
 		const bottomContent = document.querySelector('.bottom-content') as HTMLElement;
 		if (bottomContent) {
 			bottomContent.style.display = 'none';
@@ -26,9 +33,9 @@ export class PopupsPage implements OnInit {
 		const popup = document.querySelector('#popups') as HTMLElement;
 		if (popup) { popup.style.display = 'block'; }
 		
-		this.popup = await this.imageService.getRandomImage();
+		this.popup = await this.imageService.getRandomImage(this.currentPack);
 		const interval = setInterval(async () => {
-			this.popup = await this.imageService.getRandomImage();
+			this.popup = await this.imageService.getRandomImage(this.currentPack);
 		}, this.timeBetweenPopups);
 
 		setTimeout(() => {
