@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
+import { Platform, ModalController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-accounts',
@@ -36,11 +37,15 @@ export class AccountsPage implements OnInit {
 	currentDisplayedAccount: any = {};
 
 
-	constructor(private apiService: ApiService) {}
+	constructor(private apiService: ApiService, private platform: Platform, private modalController: ModalController) {}
 
 	async ngOnInit() {
 		this.accounts = await this.apiService.getSocials();
 		this.filteredAccounts = [...this.accounts];
+
+		this.platform.backButton.subscribeWithPriority(10, () => {
+			this.handleBackButton();
+		});
 	}
 
 	isDateInRange(date: Date, range: string): boolean {
@@ -148,6 +153,30 @@ export class AccountsPage implements OnInit {
 
 	copyToClipboard(text: string) {
 		navigator.clipboard.writeText(text);
+	}
+
+	async handleBackButton() {
+		// Check if modals are open and dismiss them properly
+		if (this.isFilterModalOpen) {
+			await this.modalController.dismiss('filterModal');
+			this.isFilterModalOpen = false;
+		} else if (this.isAddAccountModalOpen) {
+			await this.modalController.dismiss('addAccountModal');
+			this.isAddAccountModalOpen = false;
+		} else if (this.isDisplayAccountModalOpen) {
+			await this.modalController.dismiss('displayAccountModal');
+			this.isDisplayAccountModalOpen = false;
+		} else {
+			return;
+		}
+	}
+
+	handleRefresh(event: any) {
+		this.apiService.getSocials().then((accounts) => {
+			this.accounts = accounts;
+			this.filterAccounts();
+			event.target.complete();
+		});
 	}
 
 }
