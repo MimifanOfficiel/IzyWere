@@ -12,6 +12,7 @@ export class AppComponent {
     // { title: 'Wallpaper', url: '/wallpaper', icon: 'paper-plane' },
     { title: 'Popups', url: '/popups', icon: 'heart' },
     { title: 'Random website', url: '/random-website', icon: 'cloud' },
+    { title: 'Shared Accounts', url: '/accounts', icon: 'people' },
     // { title: 'Notifications settings', url: '/notifications-settings', icon: 'settings' },
     { title: 'Settings', url: '/settings', icon: 'settings' },
   ];

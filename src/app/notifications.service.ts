@@ -21,9 +21,15 @@ export class NotificationService {
 						autoCancel: false, // Ne pas fermer la notification automatiquement
 						ongoing: true, // Rend la notification persistante
 						smallIcon: 'ic_stat_icon',
+						actionTypeId: 'noop',
 					},
 				],
 			});
 		}
+		LocalNotifications.addListener('localNotificationActionPerformed', (notification) => {
+			console.log('Notification clicked:', notification);
+		});
 	}
+
+	
 }

@@ -1,0 +1,249 @@
+<ion-header [translucent]="true">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+		</ion-buttons>
+		<ion-title>Accounts</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+	<ion-header collapse="condense">
+		<ion-toolbar>
+			<ion-title size="large">Accounts</ion-title>
+		</ion-toolbar>
+	</ion-header>
+	
+	<ion-button expand="block" (click)="setFilterModalOpen(true)">Filter Accounts</ion-button>
+	
+	<!-- Filter modal -->
+	<ion-modal [isOpen]="isFilterModalOpen">
+		<ng-template>
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>Filter Accounts</ion-title>
+					<ion-buttons slot="end">
+						<ion-button (click)="setFilterModalOpen(false)">Close</ion-button>
+					</ion-buttons>
+				</ion-toolbar>
+			</ion-header>
+			<ion-content class="ion-padding">
+				
+				<!-- Discord user filtering -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">Discord user</ion-label>
+						<ion-input type="text" [(ngModel)]="filters.discord_user"></ion-input>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- Social names filtering (discord, google, twitter, etc....) -->
+				<ion-list>
+					<ion-item>
+						<ion-select label="Social name" placeholder="Select one or more" [(ngModel)]="filters.socials" [multiple]="true">
+							<ion-select-option *ngFor="let social of socialNetworks" [value]="social">{{ social }}</ion-select-option>
+						</ion-select>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- Date published filtering (less than 7 days, last month, etc...) -->
+				<ion-list>
+					<ion-item>
+						<ion-select label="Date published" placeholder="Select one" [(ngModel)]="filters.date">
+							<ion-select-option *ngFor="let date of datePublished" [value]="date">{{ date }}</ion-select-option>
+						</ion-select>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- The account has mfa enabled -->
+				<ion-list>
+					<ion-item>
+						<ion-select label="Has MFA enabled" placeholder="Select one" [(ngModel)]="filters.has_mfa">
+							<ion-select-option *ngFor="let option of hasMFA" [value]="option">{{ option }}</ion-select-option>
+						</ion-select>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- Apply filters button -->
+				<ion-button expand="block" (click)="applyFilters()">Apply Filters</ion-button>
+				
+			</ion-content>
+		</ng-template>
+	</ion-modal>
+
+	<!-- Adding an account modal -->
+	<ion-modal [isOpen]="isAddAccountModalOpen">
+		<ng-template>
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>Expose your account ❤ </ion-title>
+					<ion-buttons slot="end">
+						<ion-button (click)="setAccountModalOpen(false)">Close</ion-button>
+					</ion-buttons>
+				</ion-toolbar>
+			</ion-header>
+			<ion-content class="ion-padding">
+				
+				<!-- Discord user -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">Your discord username</ion-label>
+						<ion-input type="text" [(ngModel)]="newAccount.discord_user"></ion-input>
+					</ion-item>
+				</ion-list>
+				
+
+				<!-- Social -->
+				<ion-list>
+					<ion-item>
+						<ion-select label="Social" placeholder="Select one" [(ngModel)]="newAccount.social">
+							<ion-select-option *ngFor="let social of addingSocialNetworks" [value]="social">{{ social }}</ion-select-option>
+						</ion-select>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- Email -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">The account's email</ion-label>
+						<ion-input type="email" [(ngModel)]="newAccount.email"></ion-input>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- Username -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">The cute little name 💋</ion-label>
+						<ion-input type="text" [(ngModel)]="newAccount.username" aria-placeholder="Enter your little name here~"></ion-input>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- Password -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">The magic word ❤</ion-label>
+						<ion-input type="password" [(ngModel)]="newAccount.password"></ion-input>
+					</ion-item>
+				</ion-list>
+
+				
+				
+				<!-- MFA -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="start">Has MFA enabled (better not😘)</ion-label>
+						<ion-checkbox slot="end" [(ngModel)]="newAccount.has_mfa"></ion-checkbox>
+					</ion-item>
+				</ion-list>
+				
+				<!-- Add account button -->
+				<ion-button expand="block" (click)="addAccount()">Add Account</ion-button>
+				
+			</ion-content>
+		</ng-template>
+	</ion-modal>
+
+	<!-- Displaying all the details of an account modal -->
+	<ion-modal [isOpen]="isDisplayAccountModalOpen">
+		<ng-template>
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>{{ currentDisplayedAccount.discord_user }}'s {{ currentDisplayedAccount.social }}</ion-title>
+					<ion-buttons slot="end">
+						<ion-button (click)="setDisplayAccountModalOpen(false)">Close</ion-button>
+					</ion-buttons>
+				</ion-toolbar>
+			</ion-header>
+			<ion-content class="ion-padding">
+				
+				<!-- Discord user -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">Discord user</ion-label>
+						<ion-input type="text" [(ngModel)]="currentDisplayedAccount.discord_user" disabled></ion-input>
+						<ion-button slot="end" id="copied-discord_username" (click)="copyToClipboard(currentDisplayedAccount.discord_user)">Copy 😊</ion-button>
+						<ion-toast trigger="copied-discord_username" message="Discord username copied to clipboard" [duration]="1000"></ion-toast>
+					</ion-item>
+				</ion-list>
+				
+
+				<!-- Social -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">Social</ion-label>
+						<ion-input type="text" [(ngModel)]="currentDisplayedAccount.social" disabled></ion-input>
+					</ion-item>
+				</ion-list>
+
+
+				<!-- Email -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">Email</ion-label>
+						<ion-input type="email" [(ngModel)]="currentDisplayedAccount.email" disabled></ion-input>
+						<ion-button slot="end" id="copied-email" (click)="copyToClipboard(currentDisplayedAccount.email)">Copy~</ion-button>
+						<ion-toast trigger="copied-email" message="Email copied to clipboard" [duration]="1000"></ion-toast>
+					</ion-item>
+				</ion-list>
+
+				<!-- Username -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">Username</ion-label>
+						<ion-input type="text" [(ngModel)]="currentDisplayedAccount.username" disabled></ion-input>
+						<ion-button slot="end" id="copied-username" (click)="copyToClipboard(currentDisplayedAccount.username)">Copy❤</ion-button>
+						<ion-toast trigger="copied-username" message="Username copied to clipboard" [duration]="1000"></ion-toast>
+					</ion-item>
+				</ion-list>
+
+				<!-- Password -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="floating">Password</ion-label>
+						<ion-input type="text" [(ngModel)]="currentDisplayedAccount.password" disabled></ion-input>
+						<ion-button slot="end" id="copied-password" (click)="copyToClipboard(currentDisplayedAccount.password)">Copy😘</ion-button>
+						<ion-toast trigger="copied-password" message="Password copied to clipboard" [duration]="1000"></ion-toast>
+					</ion-item>
+				</ion-list>
+
+				<!-- MFA -->
+				<ion-list>
+					<ion-item>
+						<ion-label position="start">Has MFA enabled</ion-label>
+						<ion-checkbox slot="end" [(ngModel)]="currentDisplayedAccount.has_mfa" disabled></ion-checkbox>
+					</ion-item>
+				</ion-list>
+
+
+			</ion-content>
+		</ng-template>
+	</ion-modal>
+
+			
+
+
+
+	<!-- Accounts list -->
+	<ion-list>
+		<ion-item *ngFor="let account of filteredAccounts" (click)="viewAccountDetails(account)">
+			<ion-label>
+				<h2>{{ account.discord_user }}'s {{ account.social }}</h2>
+				<p> Exposed on {{ account.created_at | date: 'MMMM d, y, h:mm a' }}</p>
+			</ion-label>
+		</ion-item>
+	</ion-list>
+	
+	<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+		<ion-fab-button (click)="setAccountModalOpen(true)">
+			<ion-icon name="add"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
+	
+</ion-content>
