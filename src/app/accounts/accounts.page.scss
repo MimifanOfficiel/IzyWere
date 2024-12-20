@@ -1,0 +1,19 @@
+ion-button, ion-range{
+	--background: rgb(240, 51, 83);
+	--bar-background: rgb(177, 15, 15);
+	--bar-background-active: rgb(177, 15, 15);
+	--knob-background: rgb(248, 106, 106);
+	--pin-background: rgb(250, 98, 123);
+}
+
+ion-checkbox::part(container) {
+    --background: rgb(240, 51, 83);
+    --border-color: rgb(240, 51, 83);
+    --checkbox-background-checked: rgb(221, 27, 60);
+    border: 2px solid rgb(221, 27, 60);
+}
+
+ion-fab-button {
+    --background: rgb(240, 51, 83);
+    --background-activated: rgb(221, 27, 60);
+}
